@@ -125,7 +125,7 @@ pad you hit.
 
 - **B1** cycles **TRIM**, **LAYERS**, **TUNE** and **AMP ENV** (on a sampled
   instrument: **ZONES**, **TUNE** and **AMP ENV**).
-- **B2** cycles **PLAY**, **COLOUR**, **FOLLOW** and **CLOUD**.
+- **B2** cycles **PLAY**, **COLOUR**, **FOLLOW**, **CLOUD**, **ARP** and **CHORD**.
 - **B3** cycles **MIX**, **SENDS**, **FILTER**, **FILT ENV** and **KIT FILT**.
 
 Press the lit key again to go to its next page. The dots under a key show

@@ -1517,6 +1517,12 @@ void helpers() {
     CHECK(chord_notes(project, track, 1, keys) == 4 && keys[0] == pad_note(project, track, 1).key && keys[0] == 42 && keys[3] == 52);
     CHECK(chord_name(project, track, 1) == "F#m7");
     track.transpose = 0;
+    { // A kit pad plays its chord's intervals pitched from the pad (Context::play_pad): Em7 stacks 0, 3, 7, 10.
+        Track kit; kit.engine = EngineKind::Sampler; kit.octave = 2; kit.chord_type = 1;
+        CHECK(chord_notes(project, kit, 1, keys) == 4 && keys[1] - keys[0] == 3 && keys[2] - keys[0] == 7 && keys[3] - keys[0] == 10);
+        kit.layout = PadLayout::Drums;
+        CHECK(chord_notes(project, kit, 1, keys) == 1); // drums: the pad's hit alone
+    }
     { // Any keys held together, named (stage-preset B): the shape over a root, the bass after a slash when it is not the root.
         const int dm7[] {38, 41, 45, 48}, c[] {48, 52, 55}, c_e[] {52, 55, 60}, one[] {60}, odd[] {60, 61}, gsus4[] {43, 48, 50};
         CHECK(name_chord(dm7, 4) == "Dm7" && name_chord(c, 3) == "C" && name_chord(c_e, 3) == "C/E");
@@ -5874,13 +5880,13 @@ void midi_tracks() {
 // Stage, context aware (shell/stage_map.h, the engines' stage tables, bindings.cpp).
 void stage() {
     using K = Binding::Kind;
-    // Every engine's table: three buttons of one to five pages (a MIDI track's B3 EDIT opens the Edit page), each named,
+    // Every engine's table: three buttons of one to six pages (a MIDI track's B3 EDIT opens the Edit page), each named,
     // its parameters the engine's own.
     for (EngineKind kind : {EngineKind::None, EngineKind::Sampler, EngineKind::Midi, EngineKind::Plugin}) {
         const auto& g = stage_groups(kind);
         const auto& info = engine_info(kind);
         for (const auto& group : g.groups) {
-            CHECK(group.count >= 1 && group.count <= 5);
+            CHECK(group.count >= 1 && group.count <= 6);
             for (unsigned n = 0; n < group.count; ++n) {
                 const auto& page = group.pages[n];
                 CHECK(page.key && std::strlen(page.key) > 0);
@@ -5891,7 +5897,8 @@ void stage() {
     }
     CHECK(stage_groups(EngineKind::Plugin).groups[0].pages[0].kind == StageKind::PluginSound);
     CHECK(stage_groups(EngineKind::Plugin).groups[2].pages[0].kind == StageKind::Mix && stage_groups(EngineKind::Sampler).groups[2].pages[0].kind == StageKind::PadMix);
-    CHECK(stage_groups(EngineKind::Sampler).groups[0].pages[0].kind == StageKind::Trim && stage_groups(EngineKind::Sampler).groups[1].count == 4);
+    CHECK(stage_groups(EngineKind::Sampler).groups[0].pages[0].kind == StageKind::Trim && stage_groups(EngineKind::Sampler).groups[1].count == 6);
+    CHECK(stage_groups(EngineKind::Sampler).groups[1].pages[4].kind == StageKind::Arp && stage_groups(EngineKind::Sampler).groups[1].pages[5].kind == StageKind::Chord);
     CHECK(stage_groups(EngineKind::None).groups[2].pages[0].kind == StageKind::NewMidi);
 
     auto project = std::make_unique<Project>();
@@ -5981,8 +5988,8 @@ void stage() {
     CHECK(cards(false)[0].kind == K::FxParam && cards(false)[0].id == 0 * 64 + 0 * 8 + 0);
     CHECK(!cards(true)[0].bound() || cards(true)[0].id == 3);
 
-    // A kit, on the last pad hit: B1 TRIM LAYERS TUNE AMP ENV, B2 PLAY FOLLOW CLOUD, B3 MIX SENDS FILTER FILT ENV
-    // KIT FILT. TRIM start, end, loop, zoom on Shift; MIX K2 the kit's volume;
+    // A kit, on the last pad hit: B1 TRIM LAYERS TUNE AMP ENV, B2 PLAY COLOUR FOLLOW CLOUD ARP CHORD, B3 MIX SENDS
+    // FILTER FILT ENV KIT FILT. TRIM start, end, loop, zoom on Shift; MIX K2 the kit's volume;
     // AMP ENV Shift + K2 Decay From; TUNE Shift + K3 # Beats; PLAY Shift + K2 Pad Link.
     ui.track = 1;
     auto& kit = project->tracks[1];
@@ -6006,13 +6013,19 @@ void stage() {
     CHECK(key() == "FILTER" && cards(false)[2].kind == K::PadFilterType);
     stage_go(ui, 2, 3);
     CHECK(key() == "FILT ENV" && cards(false)[2].kind == K::PadFAmount);
-    // B2 PLAY -> COLOUR -> FOLLOW -> CLOUD -> PLAY; B3 ends on KIT FILT.
+    // B2 PLAY -> COLOUR -> FOLLOW -> CLOUD -> ARP -> CHORD -> PLAY; B3 ends on KIT FILT.
     stage_go(ui, 1, 0);
     stage_press(ui, kit, 1, false); CHECK(key() == "COLOUR" && cards(false)[0].kind == K::PadColour && !cards(false)[1].bound() && cards(true)[0].kind == K::PadColour);
     stage_press(ui, kit, 1, false); CHECK(key() == "FOLLOW" && cards(false)[0].id == sampler::Follow && cards(false)[1].id == sampler::FollowHow);
     stage_press(ui, kit, 1, false);
     CHECK(key() == "CLOUD" && cards(false)[0].kind == K::PadCloud && cards(false)[0].id == 1 && cards(false)[2].id == 3);
     CHECK(cards(true)[0].kind == K::PadCloud && cards(true)[0].id == 4 && cards(true)[2].id == 0);
+    stage_press(ui, kit, 1, false); // ARP and CHORD as a synth's: mode, rate, octaves; type, voicing, inversion
+    CHECK(key() == "ARP" && cards(false)[0].kind == K::ArpMode && cards(false)[1].kind == K::ArpRate && cards(false)[2].kind == K::ArpOctaves);
+    CHECK(cards(true)[0].kind == K::ArpGate && cards(true)[1].kind == K::ArpOn && cards(true)[2].kind == K::ArpHold);
+    stage_press(ui, kit, 1, false);
+    CHECK(key() == "CHORD" && cards(false)[0].kind == K::ChordType && cards(false)[1].kind == K::ChordVoicing && cards(false)[2].kind == K::ChordInvert);
+    CHECK(cards(true)[0].kind == K::ChordOn && cards(true)[2].kind == K::ArpHold);
     stage_press(ui, kit, 1, false); CHECK(key() == "PLAY");
     // A pad holding an instrument: its zones are its layers, so B1 is ZONES -> TUNE -> AMP ENV, three dots. A track
     // left on LAYERS shows ZONES on an instrument pad and LAYERS again on a sample pad.

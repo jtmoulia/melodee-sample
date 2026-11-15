@@ -6,7 +6,7 @@
 // soft keys name each button's page, with a dot a page under a cycle. Every
 // track gives the buttons the same jobs: B1 the source, B2 how it plays, B3
 // where it goes. A kit: B1 Trim / Layers / Tune / Amp Env, B2 Play / Colour /
-// Follow / Cloud, B3 Mix / Sends / Filter / Filt Env / Kit filter, on the last pad hit;
+// Follow / Cloud / Arp / Chord, B3 Mix / Sends / Filter / Filt Env / Kit filter, on the last pad hit;
 // a PLUGIN track (a synth: Melodee Poly, PD and Chip are plug-ins): B1 its
 // presets (or its face when it has none) and its parameters, B2 arp and chord,
 // B3 mix, sends, effects; a MIDI track: B1 device, program, CC, B2 arp and

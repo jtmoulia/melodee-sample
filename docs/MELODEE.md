@@ -280,7 +280,7 @@ beat; the meters show the mix.
 
 - **Stage** (Sample): the selected track's quick pages. Every track gives
   **B1–B3** the same jobs (docs/HUBS_PLAN.md): B1 the source, B2 how it
-  plays, B3 where it goes. Each holds a cycle of up to five pages (a MIDI
+  plays, B3 where it goes. Each holds a cycle of up to six pages (a MIDI
   track's B3 none: it does nothing): the lit one again
   steps to the next, another jumps to its first; the soft keys name each
   button's page, with a dot a page under a cycle. Each track keeps its own
@@ -323,7 +323,7 @@ beat; the meters show the mix.
     (Push the next one; with none yet, Push opens the effect picker; Shift +
     Knob FX adds effects), all six slots drawn with their family glyphs.
   - **A kit**: Akai's pages on the last pad hit, B1 **TRIM →
-    LAYERS → TUNE → AMP ENV** (LAYERS the pad's four samples; on a pad holding an instrument **ZONES → TUNE → AMP ENV**), B2 **PLAY → COLOUR → FOLLOW → CLOUD**, B3 **MIX → SENDS → FILTER →
+    LAYERS → TUNE → AMP ENV** (LAYERS the pad's four samples; on a pad holding an instrument **ZONES → TUNE → AMP ENV**), B2 **PLAY → COLOUR → FOLLOW → CLOUD → ARP → CHORD**, B3 **MIX → SENDS → FILTER →
     FILT ENV → KIT FILT** (SENDS the last pad's own four, K2 its send, Shift + K2 KIT SEND the track's; the pads light by
     their send into the bus shown; the sampler pages keep the same groups, without SENDS): the pad's
     waveform with its volume on the left and pan on the right, chips for
@@ -344,7 +344,10 @@ beat; the meters show the mix.
     (the selected pad as a grain cloud, each pad its own): K1 position, K2 grain size, K3
     density, Shift + K1 scan, Shift + K2 spread, Shift + K3 Cloud on or off,
     the place and grains drawn on the wave. KIT FILT: cutoff, resonance,
-    type of the one filter after every pad. While the pad sounds each of its
+    type of the one filter after every pad. ARP and CHORD are the synth's own
+    pages: the arp plays the pads held in turn at its rate, chords play the
+    pad at the chord's intervals from the scale (an instrument pad its zones).
+    While the pad sounds each of its
     voices draws a head on the waveform (the four newest; the newest with
     its wake, older ones at half), a voice cut by Mono or a mute group fading
     out over 60 ms, and PLAY counts them ("3 VOICES"). Reversed, the head runs

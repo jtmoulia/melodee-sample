@@ -357,6 +357,18 @@ void Context::play_pad(unsigned pad, uint8_t velocity, bool down) {
         }
         unsigned kit = t.bank % sampler_banks * 16 + pad;
         t.last_pad = uint8_t(kit);
+        if (t.chord) { // the pad at its chord's intervals, one pitched hit each (as 16 Levels Tune stacks a pad in
+            // pitch): an instrument pad its zones, a drum its hit moved. Through key(), so the arp, recording and
+            // the release treat them as played notes.
+            std::array<int, notes_per_step> keys {};
+            unsigned count = chord_notes(project, t, pad, keys);
+            for (unsigned n = 0; n < count; ++n) {
+                pad_keys[pad][n] = pad_note(int(sampler_first_note + kit), keys[n] - keys[0]);
+                key(pad_keys[pad][n], velocity, true);
+            }
+            ui.chord_pad = int8_t(pad);
+            return;
+        }
         pad_keys[pad][0] = int16_t(sampler_first_note + kit);
         key(pad_keys[pad][0], velocity, true);
         return;

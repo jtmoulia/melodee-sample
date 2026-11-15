@@ -791,6 +791,8 @@ const Preview previews[] {
     {"stagekitfollow", [](Shell&, Snapshot& s) { on_stage(s, 3, StageKind::Follow); s.sample = break_sample(); s.playing = true; s.project.tracks[3].params[sampler::Follow] = 1; }},
     {"stagekitcloud", [](Shell&, Snapshot& s) { on_stage(s, 3, StageKind::Cloud); s.sample = break_sample(); s.playing = true; auto& t = s.project.tracks[3]; t.pads[t.last_pad % sampler_pads].cloud = true; }},
     {"stagekitcloudoff", [](Shell&, Snapshot& s) { on_stage(s, 3, StageKind::Cloud); s.sample = break_sample(); s.playing = true; }},
+    {"stagekitarp", [](Shell&, Snapshot& s) { on_stage(s, 3, StageKind::Arp); s.playing = true; s.project.tracks[3].arp_octaves = 2; }},
+    {"stagekitchord", [](Shell&, Snapshot& s) { on_stage(s, 3, StageKind::Chord); s.playing = true; auto& t = s.project.tracks[3]; t.chord = true; t.chord_type = 1; s.ui.chord_pad = 1; }},
     {"stagecloudplaying", [](Shell&, Snapshot& s) { // CLOUD while A09 is held: its grains, the bars they cover lit, where they are
          on_stage(s, 3, StageKind::Cloud); s.sample = break_sample(); s.playing = true;
          auto& t = s.project.tracks[3];

@@ -56,7 +56,7 @@ struct EditPage {
 };
 
 // Stage (pages/stage_page.cpp, docs/MELODEE.md): the selected track's quick
-// pages. B1-B3 each hold a cycle of up to five pages (none: the key does
+// pages. B1-B3 each hold a cycle of up to six pages (none: the key does
 // nothing); pressing the lit button again steps to the next, another
 // button jumps to the first of its own. Each engine states its pages here as
 // data; StageKind says where a page's cards come from.
@@ -97,7 +97,7 @@ struct StagePage {
     std::array<int8_t, 3> shift {{-1, -1, -1}};
 };
 struct StageGroup {
-    std::array<StagePage, 5> pages;
+    std::array<StagePage, 6> pages;
     uint8_t count;
 };
 struct StageGroups {

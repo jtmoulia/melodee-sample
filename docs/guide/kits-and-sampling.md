@@ -14,7 +14,7 @@ select it without playing it.
 | Key | Pages |
 | --- | --- |
 | **B1** | **TRIM**, **LAYERS**, **TUNE**, **AMP ENV** |
-| **B2** | **PLAY**, **COLOUR**, **FOLLOW**, **CLOUD** |
+| **B2** | **PLAY**, **COLOUR**, **FOLLOW**, **CLOUD**, **ARP**, **CHORD** |
 | **B3** | **MIX**, **SENDS**, **FILTER**, **FILT ENV**, **KIT FILT** |
 
 Every track uses the keys the same way: **B1** for the sound's source, **B2**
@@ -96,6 +96,16 @@ Cloud settings. **K1** position,
 **K2** spread, **SHIFT** + **K3** Cloud on or off.
 
 ![CLOUD](../images/screens/stagekitcloud.png)
+
+**ARP**: the pads you hold play in turn. **K1** mode (Up, Down, Up-down,
+Random, Order), **K2** rate (1/4 to 1/32T), **K3** octaves. **SHIFT** +
+**K1** gate, **SHIFT** + **K2** on or off, **SHIFT** + **K3** hold.
+
+**CHORD**: one pad plays a chord from the scale, pitched from the pad:
+an instrument pad plays its zones, a drum its hit moved. **K1** type
+(Triad, Dia 7, Sus2, Sus4, Power, Dia 9), **K2** voicing (Close, Open,
+Drop 2, Spread), **K3** inversion. **SHIFT** + **K1** on or off,
+**SHIFT** + **K3** hold.
 
 **FILTER**: **K1** cutoff, **K2** resonance, **K3** type (Off, Classic,
 LPF2, LPF4, HPF2, HPF4, BPF2, BPF4).
